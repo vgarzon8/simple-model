@@ -7,8 +7,10 @@ logger = logging.getLogger(__name__)
 
 def train(cfg):
     """Train and persist model
+
     Args:
         cfg (dict): Configuration settings
+
     """
 
     import pickle
@@ -42,6 +44,12 @@ def train(cfg):
 
 
 def predict(cfg):
+    """Predict new labels with pre-trained model
+
+    Args:
+        cfg (dict): Configuration settings
+
+    """
 
     import pickle
     from yaml import safe_load
@@ -72,6 +80,13 @@ def predict(cfg):
 
 
 def main():
+    """Command line entry point
+
+    * ``ghdemo train config.yaml``
+    * ``ghdemo predict config.yaml``
+
+    """
+
     import argparse
     from yaml import safe_load
     from pathlib import Path
