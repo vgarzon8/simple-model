@@ -12,18 +12,18 @@ def train_model(
     df, target, classifier="random_forest", test_size=0.3, n_estimators=10, seed=None
 ):
     """Train simple classifer model
+
     Args:
-        df (pandas.DataFrame): Data
+        df (pandas.DataFrame): Features and target in a single data frame
         target (str): Target column name
-        classifier (str): Classifier algorithm
-            random_forest: sklearn.ensemble.RandomForestClassifier
-            gradient_boost: sklearn.ensemble.GradientBoostingClassifier
-        test_size (float): Train / test split, default: 0.3
+        classifier (str): Classifier algorithm, choices: "random_forest",
+            "gradient_boost"
+        test_size (float): Test split, default: 0.3
         n_estimators (int): Number of estimators, default: 10
         seed (int): Random state, default: None
 
     Returns:
-        sklearn estimator: Estimator fit to data
+        sklearn_estimator: Estimator fit to data
     """
 
     idx_train, idx_test = train_test_split(
