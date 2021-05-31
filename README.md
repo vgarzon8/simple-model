@@ -11,6 +11,12 @@ Simple model to demo Git / GitHub workflows
 - Simple model serialization (Pickle files)
 - Prediction using serialized model and data from configurable table
 
+## Data source
+
+Logit regression, R Data Analysis Examples, UCLA: Statistical Consulting Group.
+from https://stats.idre.ucla.edu/r/dae/logit-regression/ (accessed May 20, 2021)
+
+
 ## Modules
 
 `ghdemo`: Simple module with command line interface for classification model.
