@@ -46,7 +46,7 @@ def train_model(
         est = CLASSIF[classifier](n_estimators=n_estimators, random_state=seed)
     except KeyError as err:
         logging.error(f"Classifier {err} not implemented. Choices: f{CLASSIF.keys()}")
-        raise err
+        raise ValueError(err)
 
     est.fit(X_train, y_train)
     y_pred_train = est.predict(X_train)
