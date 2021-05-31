@@ -1,7 +1,7 @@
 # Training and prediction functions
 
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report
+from sklearn.metrics import f1_score
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 import logging
 
@@ -26,6 +26,12 @@ def train_model(
         sklearn_estimator: Estimator fit to data
     """
 
+    # Supported classifiers
+    CLASSIF = {
+        "random_forest": RandomForestClassifier,
+        "gradient_boost": GradientBoostingClassifier,
+    }
+
     idx_train, idx_test = train_test_split(
         df.index, test_size=test_size, stratify=df[target], random_state=seed
     )
@@ -36,20 +42,26 @@ def train_model(
     X_test = df.drop(columns=target).loc[idx_test].values
     y_test = df[target].loc[idx_test].values
 
-    if classifier == "random_forest":
-        est = RandomForestClassifier(n_estimators=n_estimators, random_state=seed)
-    elif classifier == "gradient_boost":
-        est = GradientBoostingClassifier(n_estimators=n_estimators, random_state=seed)
-    else:
-        logging.error(f"Classifier {classifier} not implemented")
-        raise ValueError(classifier)
+    try:
+        est = CLASSIF[classifier](n_estimators=n_estimators, random_state=seed)
+    except KeyError as err:
+        logging.error(f"Classifier {err} not implemented. Choices: f{CLASSIF.keys()}")
+        raise err
 
     est.fit(X_train, y_train)
-
     y_pred_train = est.predict(X_train)
     y_pred_test = est.predict(X_test)
 
-    logging.debug(classification_report(y_train, y_pred_train))
-    logging.info(classification_report(y_test, y_pred_test))
+    # Calculate f1 metric
+    f1 = {
+        _lbl: {_pos: f1_score(_y_true, _y_pred, pos_label=_pos) for _pos in (0, 1)}
+        for _lbl, (_y_true, _y_pred) in {
+            "train": (y_train, y_pred_train),
+            "test": (y_test, y_pred_test),
+        }.items()
+    }
+
+    logging.debug(f"train f1_0: {f1['train'][0]:5.3f} f1_1: {f1['train'][1]:5.3f}")
+    logging.info(f"test f1_0: {f1['test'][0]:5.3f} f1_1: {f1['test'][1]:5.3f}")
 
     return est
