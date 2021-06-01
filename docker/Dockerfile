@@ -15,11 +15,3 @@ COPY --chown=1000:100 . /var/app
 RUN pip install -r /var/app/requirements.txt
 RUN pip install -e /var/app --no-deps
 WORKDIR /var/dev
-
-# ###############################################################################
-# # test
-# ###############################################################################
-
-# FROM main AS test
-# WORKDIR /var/app
-# RUN pytest
